@@ -6,6 +6,7 @@ pub mod timer {
     const SYMBOL: &str = "-";
     const SYMBOL_ARROW: &str = ">";
 
+
     // unit and factor for conversion to seconds
     fn get_units() -> HashMap<String, f64> {
         let mut units: HashMap<String, f64> = HashMap::new(); 
@@ -43,10 +44,12 @@ pub mod timer {
         io::stdout().flush().unwrap();
     }
 
+
     // clear terminal screen
     fn clear_screen() {
         print!("\x1B[2J\x1B[1;1H"); // clear screen
     }
+
 
     /// split time string, e.g. "10m30s" -> ["10", "m", "30", "s"]
     fn parse_time_str(time_str: &str) -> Vec<String> {
@@ -82,6 +85,7 @@ pub mod timer {
         return split_time;
     }
 
+
     /// convert parsed time string to seconds
     fn parsed_to_seconds(split_time: Vec<String>) -> f64 {
         let units = get_units();
@@ -94,6 +98,7 @@ pub mod timer {
 
         return seconds;
     }
+
 
     /// convert time string to seconds
     pub fn str_to_seconds(time_str: &str) -> f64 {
