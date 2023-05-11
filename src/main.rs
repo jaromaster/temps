@@ -1,24 +1,16 @@
 use std::env::args;
 
-use timer::timer::{get_units, to_seconds, start_timer};
+use timer::timer::{start_timer, str_to_seconds};
 
 pub mod timer;
 
 fn main() {
 
-    let units = get_units();
+    // syntax: temps [time]
+    // [time]: 10m5s, 2h30m, ...
 
-    // syntax: temps [n] [unit]
-    let amount = args().nth(1).expect("no amount specified.");
-    let unit = args().nth(2).expect("no unit specified.");
+    let time_str = args().nth(1).expect("no time specified");
+    let seconds_to_wait = str_to_seconds(time_str.trim());
 
-    let amount_num: f64 = amount.parse().expect("could not convert amount to float.");
-
-
-    if !units.contains_key(&unit) {
-        println!("invalid unit '{}'.", &unit);
-    }
-
-    let seconds_to_wait = to_seconds(amount_num, units[&unit]);
     start_timer(seconds_to_wait);
 }
