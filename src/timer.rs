@@ -1,7 +1,9 @@
 pub mod timer {
     use std::{collections::HashMap, time, thread, io::{self, Write}};
 
-    // number of dots
+    use crossterm::{ExecutableCommand, terminal::{Clear, ClearType}, cursor::MoveUp};
+
+    // progress bar
     const N_FRACS: f64 = 40.0;
     const SYMBOL: &str = "-";
     const SYMBOL_ARROW: &str = ">";
@@ -23,20 +25,21 @@ pub mod timer {
     pub fn start_timer(secs: f64) {
         let frac_time = secs / N_FRACS;
 
-        clear_screen();
+        println!("");
 
+        // print progress bar
         for i in 1..(N_FRACS+1.0) as usize {
-            let mut out_str = String::from("[");
-            out_str.push_str(&SYMBOL.repeat(i-1));
-            out_str.push_str(&SYMBOL_ARROW);
-            out_str.push_str(&" ".repeat((N_FRACS-i as f64) as usize));
-            out_str.push(']');
-
             clear_screen();
             let pct = i as f64*100.0/N_FRACS;
-            println!("{} {}%", out_str, pct); 
+            let out_str = format!("[{}{}{}] {}%", 
+                SYMBOL.repeat(i-1),
+                SYMBOL_ARROW,
+                " ".repeat((N_FRACS-i as f64) as usize),
+                pct
+            );
+            
+            println!("{}", out_str); 
             io::stdout().flush().unwrap();
-
             thread::sleep(time::Duration::from_secs_f64(frac_time));
         }
 
@@ -45,9 +48,10 @@ pub mod timer {
     }
 
 
-    // clear terminal screen
+    // clear terminal screen (current line)
     fn clear_screen() {
-        print!("\x1B[2J\x1B[1;1H"); // clear screen
+        io::stdout().execute(MoveUp(1)).unwrap();
+        io::stdout().execute(Clear(ClearType::FromCursorDown)).unwrap();
     }
 
 
@@ -107,5 +111,4 @@ pub mod timer {
 
         return seconds;
     }
-
 }
