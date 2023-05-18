@@ -1,16 +1,24 @@
 use std::env::args;
 
 use alarm::alarm::start_alarm;
+use help::help::print_help;
 use timer::timer::{start_timer, str_to_seconds};
 
 pub mod timer;
 pub mod alarm;
+pub mod help;
 
 fn main() {
 
     // syntax: temps [mode] [time]
+    // e.g. temps
     // e.g. temps timer 20m10s
     // e.g. temps alarm 20:30:00
+
+    if args().len() == 1 {
+        print_help();
+        return;
+    }
 
     let mode = args().nth(1).expect("no mode specified");
     let time_str = args().nth(2).expect("no time specified");
@@ -24,5 +32,6 @@ fn main() {
     }
     else {
         println!("invalid mode '{}'", mode);
+        print_help();
     }   
 }

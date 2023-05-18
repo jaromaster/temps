@@ -5,6 +5,9 @@
 ### syntax
 `temps [mode] [time]`
 
+### help
+`temps`
+
 ### timer
 `temps timer 2h10m30s`
 
