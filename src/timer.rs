@@ -56,7 +56,7 @@ pub mod timer {
 
 
     /// split time string, e.g. "10m30s" -> ["10", "m", "30", "s"]
-    fn parse_time_str(time_str: &str) -> Vec<String> {
+    fn parse_time_str(time_str: &str) -> Option<Vec<String>> {
         let units = get_units();
 
         let mut split_time = Vec::new();
@@ -78,15 +78,15 @@ pub mod timer {
         // check valid
         for el in split_time.iter() {
             if el.parse::<f64>().is_err() && !units.contains_key(el) {
-                panic!("invalid time string");
+                return None;
             }
         }
         if split_time.len() % 2 != 0 {
-            panic!("invalid time string");
+            return None;
         }
 
 
-        return split_time;
+        return Some(split_time);
     }
 
 
@@ -105,10 +105,16 @@ pub mod timer {
 
 
     /// convert time string to seconds
-    pub fn str_to_seconds(time_str: &str) -> f64 {
-        let split_time = parse_time_str(time_str);
+    pub fn str_to_seconds(time_str: &str) -> Option<f64> {
+        let split_time_res = parse_time_str(time_str);
+        if split_time_res.is_none() {
+           return None
+
+        }
+
+        let split_time = split_time_res.unwrap();
         let seconds = parsed_to_seconds(split_time);
 
-        return seconds;
+        return Some(seconds);
     }
 }

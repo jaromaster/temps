@@ -25,7 +25,13 @@ fn main() {
 
     if mode == "timer" {
         let seconds_to_wait = str_to_seconds(time_str.trim());
-        start_timer(seconds_to_wait);
+        if seconds_to_wait.is_none() {
+            println!("invalid time string\n");
+            print_help();
+            return;
+        }
+
+        start_timer(seconds_to_wait.unwrap());
     }
     else if mode == "alarm" {
         start_alarm(&time_str);
